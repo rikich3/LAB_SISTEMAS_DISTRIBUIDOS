@@ -1,0 +1,416 @@
+%package list
+\documentclass{article}
+\usepackage[top=3cm, bottom=3cm, outer=3cm, inner=3cm]{geometry}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{url}
+%\usepackage{cite}
+\usepackage{hyperref}
+\usepackage{array}
+%\usepackage{multicol}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+\usepackage{natbib}
+\usepackage{pdfpages}
+\usepackage{multirow}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{svg}
+\usepackage{xcolor}
+\usepackage{listings}
+\lstdefinestyle{ascii-tree}{
+    literate={├}{|}1 {─}{--}1 {└}{+}1 
+  }
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+%\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{array}
+\usepackage{tcolorbox}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{N}{@{}m{0pt}@{}}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{xcolor}
+% \usepackage[margin=1.5cm]{geometry} % Márgenes ajustados
+\usepackage{multirow}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\itemEmail}{rchambillap@unsa.edu.pe}
+\newcommand{\itemStudent}{Chambilla Perca, Gutierrez Ccama, Valdivia Segovia}
+\newcommand{\itemCourse}{Sistemas Distribuidos}
+\newcommand{\itemCourseCode}{}
+\newcommand{\itemSemester}{VI}
+\newcommand{\itemUniversity}{Universidad Nacional de San Agustín de Arequipa}
+\newcommand{\itemFaculty}{Facultad de Ingeniería de Producción y Servicios}
+\newcommand{\itemDepartment}{Departamento Académico de Ingeniería de Sistemas e Informática}
+\newcommand{\itemSchool}{Escuela Profesional de Ingeniería de Sistemas}
+\newcommand{\itemAcademic}{2026 - A}
+\newcommand{\itemInput}{Del 13 de Abril 2026}
+\newcommand{\itemOutput}{Al 17 de Abril 2026}
+\newcommand{\itemPracticeNumber}{01}
+\newcommand{\itemTheme}{Los Hilos (Threads)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[english,spanish]{babel}
+\usepackage[utf8]{inputenc}
+\AtBeginDocument{\selectlanguage{spanish}}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\refname}{Referencias}
+\renewcommand{\tablename}{Tabla} %esto no funciona cuando se usa babel
+\AtBeginDocument{%
+	\renewcommand\tablename{Tabla}
+}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{40.51407pt}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+\fancyhead[L]{\raisebox{-0.2\height}{\includegraphics[width=3cm]{img/logo_episunsa.png}}}
+\fancyhead[C]{\fontsize{7}{7}\selectfont	\itemUniversity \\ \itemFaculty \\ \itemDepartment \\ \itemSchool \\ \textbf{\itemCourse}}
+\fancyhead[R]{\raisebox{-0.2\height}{\includegraphics[width=1.2cm]{img/logo_abet.png}}}
+\fancyfoot[L]{Grupo Intocables}
+\fancyfoot[C]{\itemCourse}
+\fancyfoot[R]{Página \thepage}
+
+% para el codigo fuente
+\usepackage{listings}
+\usepackage{color, colortbl}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{codebackground}{rgb}{0.95, 0.95, 0.92}
+\definecolor{tablebackground}{rgb}{0.8, 0, 0}
+\definecolor{rojoEncabezado}{HTML}{C0392B} % Color del encabezado
+\definecolor{azulDatos}{HTML}{2E5A96}      % Color para el texto en cursiva
+
+\lstset{frame=tb,
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3,
+	backgroundcolor= \color{codebackground},
+}
+
+\begin{document}
+
+
+	\begin{center}	
+		\fontsize{17}{17} \textbf{ Informe de Laboratorio \itemPracticeNumber}
+	\end{center}
+	\centerline{\textbf{\Large Tema: \itemTheme}}
+	
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.8} % Altura de las filas
+    \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash\bfseries}p{3.5cm}|X|>{\bfseries}p{2.5cm}|X|>{\bfseries}p{2.5cm}|X|}
+        \hline
+        % Encabezado principal
+        \rowcolor{rojoEncabezado}
+        \multicolumn{6}{|c|}{\textcolor{white}{\textbf{INFORMACIÓN BÁSICA}}} \\ \hline
+        
+        % Asignatura
+        ASIGNATURA: & \multicolumn{5}{l|}{SISTEMAS DISTRIBUIDOS} \\ \hline
+        
+        % Título
+        TÍTULO DE LA PRÁCTICA: & \multicolumn{5}{l|}{\textcolor{azulDatos}{\textit{Los Hilos (Threads)}}} \\ \hline
+        
+        % Fila de datos numéricos
+        NÚMERO DE PRÁCTICA: & \textcolor{azulDatos}{\textit{01}} & AÑO LECTIVO: & 2026 & NRO. SEMESTRE: & 2026A \\ \hline
+        
+        % Fecha y Hora
+        FECHA DE PRESENTACIÓN & \textcolor{azulDatos}{\textit{14/04/2025}} & HORA DE PRESENTACIÓN & \multicolumn{3}{l|}{12:00} \\ \hline
+        
+        % Integrantes y Nota
+        \multicolumn{4}{|l|}{\multirow{2}{*}{\parbox[t]{10cm}{\vspace{0.2cm}\textbf{INTEGRANTE (s): GRUPO `` Intocables ''} \\ \vspace{0.1cm} \quad $\bullet$ CHAMBILLA PERCA RICARDO \\ \quad $\bullet$ JUAN DIEGO GUTIERREZ CCAMA \\ \quad $\bullet$ RYAN FABIAN VALDIVIA SEGOVIA}}} & \multirow{2}{*}{\textbf{NOTA:}} & \multirow{2}{*}{} \\ 
+        \multicolumn{4}{|l|}{} & & \\[1cm] \hline
+        
+        % s
+        \multicolumn{6}{|l|}{\textbf{DOCENTE(s):}} \\ 
+        \multicolumn{6}{|l|}{\textcolor{azulDatos}{\textit{Mg. Maribel Molina Barriga}}} \\ \hline
+    \end{tabularx}
+\end{table}
+
+	\vspace*{10px}
+	%\vspace*{0.5cm}	
+
+	% \begin{table}[h!]
+	% 	\begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}        
+	% 		\hline 
+	% 		\rowcolor{tablebackground}
+	% 		\color{white} \textbf{Estudiante} & \color{white}\textbf{Escuela}  & \color{white}\textbf{Asignatura}   \\
+	% 		\hline 
+	% 		{\itemStudent \par \itemEmail} & \itemSchool & {\itemCourse \par Semestre: \itemSemester \par}     \\
+	% 		\hline 			
+	% 	\end{tabular}
+	% \end{table}		
+	
+	% \begin{table}[H]
+	% 	\begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}
+	% 		\hline 
+	% 		\rowcolor{tablebackground}
+	% 		\color{white}\textbf{Laboratorio} & \color{white}\textbf{Tema}  & \color{white}\textbf{Duración}   \\
+	% 		\hline 
+	% 		\itemPracticeNumber & \itemTheme & 02 horas   \\
+	% 		\hline 
+	% 	\end{tabular}
+	% \end{table}
+	
+	% \begin{table}[H]
+	% 	\begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}
+	% 		\hline 
+	% 		\rowcolor{tablebackground}
+	% 		\color{white}\textbf{Semestre académico} & \color{white}\textbf{Fecha de inicio}  & \color{white}\textbf{Fecha de entrega}   \\
+	% 		\hline 
+	% 		\itemAcademic & \itemInput &  \itemOutput  \\
+	% 		\hline 
+	% 	\end{tabular}
+	% \end{table}
+
+    \section{Análisis de Casos y Ejecución Adicional}
+    
+    \subsection{Probando y ejecutando el PROBLEMA RESUELTO POR EL DOCENTE (Anexo 1)}
+    
+    El Anexo 1 presenta una simulación de productos en un supermercado con dos enfoques: uno secuencial (un solo hilo) y otro paralelo (múltiples hilos heredando de \texttt{Thread} e implementando \texttt{Runnable}). 
+    
+    Para probar esto, se organizaron las clases \texttt{Cliente.java}, \texttt{Cajera.java}, \texttt{CajeraThread.java}, \texttt{Main.java}, \texttt{MainThread.java} y \texttt{MainRunnable.java} dentro del directorio \texttt{src/}.
+
+    \begin{lstlisting}[language=bash, numbers=none, caption={Compilación y ejecución de los distintos escenarios del Anexo 1}]
+    # Compilar todas las clases del Anexo 1
+    $ javac src/Cliente.java src/Cajera*.java src/Main*.java
+    
+    # 1. Ejecucion Secuencial (Tarda aprox 26 segundos)
+    $ java -cp src Main
+    
+    # 2. Ejecucion Paralela heredando de Thread (Tarda aprox 15 segundos)
+    $ java -cp src MainThread
+    
+    # 3. Ejecucion Paralela implementando Runnable (Tarda aprox 15 segundos)
+    $ java -cp src MainRunnable
+    \end{lstlisting}
+
+    \textbf{Evaluación de la ejecución:}
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.8\textwidth]{img/ejecucion_2.png}
+			\caption{Compilación del código fuente en terminal}
+			\label{fig:compilacion}
+		\end{figure}
+
+    En la ejecución secuencial (\texttt{Main}), la \texttt{Cajera 1} procesa todos los productos del \texttt{Cliente 1} y, solo cuando termina, la \texttt{Cajera 2} empieza a procesar al \texttt{Cliente 2}. Los tiempos de espera se suman de forma lineal. 
+    Por el contrario, en \texttt{MainThread} y \texttt{MainRunnable}, ambas cajeras inician su proceso de manera casi simultánea. El entrelazado de los mensajes en la consola evidencia cómo el planificador del sistema operativo (Scheduler) asigna tiempo de CPU a cada hilo. El tiempo total de ejecución se reduce drásticamente, igualando al tiempo de la compra más larga (aproximadamente 15 segundos) en lugar de la suma de ambas.
+
+    \subsubsection*{Insights encontrados (Anexo 1)}
+    \begin{itemize}
+        \item \textbf{Herencia vs Composición (Thread vs Runnable):} El código demuestra correctamente ambas formas de crear hilos. Sin embargo, un ingeniero senior siempre preferirá implementar la interfaz \texttt{Runnable} (o \texttt{Callable}). Heredar de \texttt{Thread} bloquea la posibilidad de heredar de otra clase base (Java no soporta herencia múltiple) y rompe el principio de responsabilidad única, ya que el modelo de dominio (Cajera) no debería estar fuertemente acoplado a la infraestructura de concurrencia.
+        \item \textbf{Gestión de Hilos:} Instanciar y arrancar hilos crudos (\texttt{new Thread().start()}) es costoso y anticuado para sistemas grandes. En un entorno de producción actual, se delegaría esta tarea a la API de concurrencia de Java (\texttt{java.util.concurrent.ExecutorService}), utilizando un \textit{Thread Pool} para reciclar hilos y evitar saturar la memoria del sistema operativo si llegaran 1000 clientes a la vez.
+    \end{itemize}
+
+\section{EJERCICIOS/PROBLEMAS PROPUESTOS}
+	\begin{itemize}		
+		\item a. Implementar, ejecutar y probar el código de los anexos 2, de manera adecuada.
+		\item b. Evaluar resultados obtenidos.
+    \item c. Escriba un reporte sobre las tareas realizadas y resultados.
+    \item d. Escriba sus conclusiones.
+	\end{itemize}
+    
+	\section{Desarrollo de los Ejercicios}
+    
+    \subsection{a. Implementación y ejecución del código (Productor - Consumidor)}
+    Se procedió a separar el código provisto en el Anexo 2 en sus respectivas clases. A continuación, se muestra el código fuente de la implementación.
+
+    \lstinputlisting[language=Java, caption={CubbyHole.java: Monitor de sincronización}]{src/CubbyHole.java}
+    
+    \lstinputlisting[language=Java, caption={Productor.java: Hilo productor}]{src/Productor.java}
+    
+    \lstinputlisting[language=Java, caption={Consumidor.java: Hilo consumidor}]{src/Consumidor.java}
+    
+    \lstinputlisting[language=Java, caption={Demo.java: Clase Principal}]{src/Demo.java}
+
+    \subsection{b. Evaluación de resultados obtenidos}
+    Para la ejecución, utilizamos la terminal:
+    \begin{lstlisting}[language=bash, numbers=none, caption={Comandos de compilación y ejecución}]
+    $ javac src/*.java
+    $ java -cp src Demo
+    \end{lstlisting}
+    
+    \textbf{Salida esperada y obtenida:}
+    Debido a que hemos usado el recurso de sincronización mediante \texttt{wait()} y \texttt{notifyAll()} en un monitor compartido (\texttt{CubbyHole}), la salida fue perfectamente secuencial y sincronizada:
+    \begin{verbatim}
+    Productor #1 pone: 0
+    Consumidor #1 obtiene: 0
+    Productor #1 pone: 1
+    Consumidor #1 obtiene: 1
+    ...
+    Productor #1 pone: 9
+    Consumidor #1 obtiene: 9
+    \end{verbatim}
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.8\textwidth]{img/compilacion.png}
+			\caption{Compilación del código fuente en terminal}
+			\label{fig:compilacion}
+		\end{figure}
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.8\textwidth]{img/ejecucion.png}
+			\caption{Ejecución del programa Demo mostrando salida sincronizada}
+			\label{fig:ejecucion}
+		\end{figure}
+
+    \subsection{c. Reporte sobre las tareas realizadas}
+    Se implementó el clásico problema de concurrencia "Productor-Consumidor". 
+    \begin{itemize}
+        \item \textbf{El Productor:} Genera números del 0 al 9. Después de colocar un número en el almacenamiento compartido, entra en un estado de pausa temporal (sleep) que simula el tiempo de procesamiento.
+        \item \textbf{El Consumidor:} Se encarga de recoger los valores del almacenamiento compartido en el mismo orden.
+        \item \textbf{Sincronización:} Ambos hilos compiten por el objeto \texttt{CubbyHole}. Gracias a la variable booleana \texttt{available} y los bloques \texttt{synchronized}, se evita la \textit{condición de carrera}. El Productor no puede sobrescribir un valor antes de que sea leído, y el Consumidor no lee un mismo valor dos veces ni lee un valor antes de que sea generado.
+    \end{itemize}
+
+    \subsubsection*{Insights encontrados (Anexo 2)}
+    \begin{itemize}
+        \item \textbf{Prevención de Despertares Espurios (Spurious Wakeups):} Un acierto crítico en el código provisto (clase \texttt{CubbyHole}) es el uso de un bucle \texttt{while} en lugar de un \texttt{if} para verificar la condición de disponibilidad: \texttt{while (available == false) \{ wait(); \}}. Los sistemas operativos pueden despertar hilos sin que se haya llamado a \texttt{notify()}, por lo que la comprobación cíclica de la condición es una excelente práctica de ingeniería.
+        \item \textbf{notify() vs notifyAll():} El uso de \texttt{notifyAll()} es el enfoque más seguro en este patrón, especialmente si escalamos a múltiples productores y consumidores compartiendo el mismo \texttt{CubbyHole}. Usar un simple \texttt{notify()} podría causar que un hilo productor despierte a otro hilo productor por error, llevándolos a un interbloqueo (\textit{deadlock}). 
+        \item \textbf{Abstracciones de Alto Nivel:} Aunque el uso manual de monitores (\texttt{wait/notify}) es fundamental para el aprendizaje, en un escenario empresarial un arquitecto de software reemplazaría el monitor manual por estructuras concurrentes de alto nivel ya optimizadas del paquete \texttt{java.util.concurrent}, como \texttt{ArrayBlockingQueue} o \texttt{LinkedBlockingQueue}, las cuales manejan los bloqueos y notificaciones de forma implícita y altamente eficiente.
+    \end{itemize}
+
+    \section{Conclusiones}
+    \begin{itemize}
+        \item La programación multihilo en Java permite la ejecución concurrente, mejorando el rendimiento de las aplicaciones, especialmente cuando existen operaciones de Entrada/Salida o latencias.
+        \item El acceso descontrolado a memoria compartida provoca resultados erróneos o corrupción de datos. 
+        \item El uso de monitores y las funciones \texttt{wait()} y \texttt{notifyAll()} resultan indispensables para coordinar el trabajo entre hilos, garantizando que los datos sean consumidos e insertados de manera íntegra y ordenada.
+    \end{itemize}
+
+\clearpage
+
+\section{CUESTIONARIO}
+
+\subsection{a. ¿Por qué es importante el estudio de hilos y multihilos en un sistema distribuido?}
+En un sistema distribuido, gran parte de las operaciones son a través de la red (arquitectura Cliente-Servidor), lo que implica una latencia considerable. El uso de hilos permite "esconder" esta latencia, ya que mientras un hilo espera una respuesta de un recurso bloqueante (como disco físico o red), la CPU puede cambiar de contexto a otro hilo para seguir atendiendo nuevas peticiones. Esto es vital para construir servidores escalables (como Servidores Web replicados) que requieran procesar miles de conexiones simultáneas maximizando el \textit{throughput} (rendimiento).
+
+\subsection{b. Describe ¿Cómo están compuestos los hilos? y ¿Cuál es la diferencia entre hilos y procesos?}
+\textbf{Composición de un Hilo:}
+En un entorno multihilo, a cada hilo se le asocia:
+\begin{itemize}
+    \item Un estado de ejecución (Listo, Bloqueado, Ejecutándose).
+    \item Un Contador de Programa (PC) y un contexto (conjunto de registros de CPU).
+    \item Una pila de ejecución (Stack).
+    \item Un espacio de almacenamiento local para sus variables.
+\end{itemize}
+
+\textbf{Diferencia entre Hilo y Proceso:}
+\begin{itemize}
+    \item \textbf{Proceso:} Es una entidad de ejecución pesada. Posee su propio espacio de direcciones virtuales, memoria, recursos de E/S y PCB (Bloque de Control de Proceso). La comunicación entre procesos (IPC) requiere llamadas al sistema operativo y el cambio de contexto es muy costoso.
+    \item \textbf{Hilo (Thread):} Es un proceso ligero (Lightweight Process) que vive \textit{dentro} de un proceso. Múltiples hilos comparten el \textbf{mismo espacio de direcciones} (memoria, código, datos) de su proceso padre. Por esto, su cambio de contexto es sumamente rápido y eficiente, aunque obliga a los programadores a gestionar la concurrencia.
+\end{itemize}
+
+\subsection{c. Realice un cuadro comparativo de ventajas y desventajas del uso de hilos}
+
+\begin{table}[H]
+    \centering
+    \caption{Ventajas y Desventajas del uso de hilos}
+    \begin{tabular}{|p{7cm}|p{7cm}|}
+    \hline
+    \rowcolor{tablebackground}
+    \color{white}\textbf{Ventajas} & \color{white}\textbf{Desventajas} \\
+    \hline
+    \textbf{Mayor capacidad de respuesta:} Permite que una aplicación continúe ejecutándose incluso si una parte está bloqueada. & \textbf{Sincronización compleja:} El acceso a recursos compartidos exige mecanismos estrictos (semáforos, monitores) para evitar condiciones de carrera. \\
+    \hline
+    \textbf{Economía y Eficiencia:} Es más rápido y económico (en uso de CPU) crear hilos y cambiar contextos entre ellos que hacer lo mismo con procesos completos. & \textbf{Difícil depuración (Debugging):} Los errores en hilos son difíciles de rastrear ya que el orden de ejecución es no determinista. \\
+    \hline
+    \textbf{Compartición de recursos:} Todos los hilos de un proceso comparten memoria y archivos, lo que facilita el intercambio de datos. & \textbf{Riesgo de Deadlocks:} Un mal diseño de sincronización puede llevar a "interbloqueos" donde los hilos se paralizan mutuamente de forma perpetua. \\
+    \hline
+    \textbf{Aprovechamiento de arquitecturas Multiprocesador:} En máquinas con múltiples núcleos, los hilos pueden ejecutarse verdaderamente en paralelo, incrementando la escalabilidad. & \textbf{Falta de aislamiento:} Si un hilo comete un error fatal (como desbordamiento de memoria compartida), puede hacer colapsar a todo el proceso padre y sus demás hilos. \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\clearpage
+	
+	\subsection{\textcolor{red}{Rúbrica para el contenido del Informe y demostración}}
+	\begin{itemize}			
+		\item El alumno debe marcar o dejar en blanco en celdas de la columna \textbf{Checklist} si cumplio con el ítem correspondiente.
+		\item Si un alumno supera la fecha de entrega,  su calificación será sobre la nota mínima aprobada, siempre y cuando cumpla con todos lo items.
+		\item El alumno debe autocalificarse en la columna \textbf{Estudiante} de acuerdo a la siguiente tabla:
+	
+		\begin{table}[ht]
+			\caption{Niveles de desempeño}
+			\begin{center}
+			\begin{tabular}{ccccc}
+    			\hline
+    			 & \multicolumn{4}{c}{Nivel}\\
+    			\cline{1-5}
+    			\textbf{Puntos} & Insatisfactorio 25\%& En Proceso 50\% & Satisfactorio 75\% & Sobresaliente 100\%\\
+    			\textbf{2.0}&0.5&1.0&1.5&2.0\\
+    			\textbf{4.0}&1.0&2.0&3.0&4.0\\
+    		\hline
+			\end{tabular}
+		\end{center}
+	\end{table}	
+	
+	\end{itemize}
+	
+	\begin{table}[H]
+		\caption{Rúbrica para contenido del Informe y demostración}
+		\setlength{\tabcolsep}{0.5em} % for the horizontal padding
+		{\renewcommand{\arraystretch}{1.5}% for the vertical padding
+		%\begin{center}
+		\begin{tabular}{|p{2.7cm}|p{7cm}|x{1.3cm}|p{1.2cm}|p{1.5cm}|p{1.1cm}|}
+			\hline
+    		\multicolumn{2}{|c|}{Contenido y demostración} & Puntos & Checklist & Estudiante & Profesor\\
+			\hline
+			\textbf{1. GitHub} & Hay enlace URL activo del directorio para el  laboratorio hacia su repositorio GitHub con código fuente terminado y fácil de revisar. &2 &X &2 & \\ 
+			\hline
+			\textbf{2. Commits} &  Hay capturas de pantalla de los commits más importantes con sus explicaciones detalladas. (El profesor puede preguntar para refrendar calificación). &4 &X &4 & \\ 
+			\hline 
+			\textbf{3. Código fuente} &  Hay porciones de código fuente importantes con numeración y explicaciones detalladas de sus funciones. &2 &X &2 & \\ 
+			\hline 
+			\textbf{4. Ejecución} & Se incluyen ejecuciones/pruebas del código fuente  explicadas gradualmente. &2 &X &2 & \\ 
+			\hline			
+			\textbf{5. Pregunta} & Se responde con completitud a la pregunta formulada en la tarea.  (El profesor puede preguntar para refrendar calificación).  &2 &X &2 & \\ 
+			\hline	
+			\textbf{6. Fechas} & Las fechas de modificación del código fuente estan dentro de los plazos de fecha de entrega establecidos. &2 &X &2 & \\ 
+			\hline 
+			\textbf{7. Ortografía} & El documento no muestra errores ortográficos. &2 &X &2 & \\ 
+			\hline 
+			\textbf{8. Madurez} & El Informe muestra de manera general una evolución de la madurez del código fuente,  explicaciones puntuales pero precisas y un acabado impecable.   (El profesor puede preguntar para refrendar calificación).  &4 &X &4 & \\ 
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Total}} &20 & &20 & \\ 
+			\hline
+		\end{tabular}
+		%\end{center}
+		%\label{tab:multicol}
+		}
+	\end{table}
+	
+\clearpage
+
+\section{Referencias}
+\begin{itemize}			
+	\item Tanenbaum, A.S. (2008). Sistemas distribuidos: principios y paradigmas. México. Pearson Educación.
+    \item Deitel, H. M., \& Deitel, P. J. (2004). Cómo programar en Java. México: Pearson Educación.
+    \item Documentación oficial de Oracle sobre Hilos en Java: \url{https://docs.oracle.com/javase/tutorial/essential/concurrency/index.html}
+\end{itemize}	
+			
+\end{document}
