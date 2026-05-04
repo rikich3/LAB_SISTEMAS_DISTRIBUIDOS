@@ -10,3 +10,7 @@
 *.synctex.gz
 *.bbl
 *.blg
+_minted-main/
+img/
+main.tex
+prompt.txt
