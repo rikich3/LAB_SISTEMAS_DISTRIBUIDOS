@@ -41,6 +41,7 @@ public class LamportClock {
                     }
 
                     int receivedTime = clock.tick();
+
                     System.out.println(
                             "Thread " + Thread.currentThread().threadId() + " received event with Lamport time "
                                     + receivedTime);

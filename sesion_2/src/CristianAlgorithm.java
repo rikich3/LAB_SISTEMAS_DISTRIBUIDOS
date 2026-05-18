@@ -14,6 +14,7 @@ class TimeServer {
 
     /**
      * Gets the current time of the server.
+     * 
      * @return current server time
      */
     public long getTime() {
@@ -31,7 +32,7 @@ public class CristianAlgorithm {
      * Calculates the synchronized time for the client.
      * 
      * @param serverTime The time returned by the server.
-     * @param rtt The round-trip time.
+     * @param rtt        The round-trip time.
      * @return The new synchronized time for the client.
      */
     public static long calculateSynchronizedTime(long serverTime, long rtt) {
@@ -42,8 +43,9 @@ public class CristianAlgorithm {
         // Test case 1
         long expected = 1050;
         long actual = calculateSynchronizedTime(1000, 100);
-        if (expected != actual) throw new AssertionError("Test 1 failed");
-        
+        if (expected != actual)
+            throw new AssertionError("Test 1 failed");
+
         logger.info("All tests passed");
     }
 
@@ -51,15 +53,15 @@ public class CristianAlgorithm {
         testCristianAlgorithm();
 
         TimeServer server = new TimeServer(5000); // Server time is 5000ms
-        
+
         long t0 = 1000; // Client sends request at its own time 1000
-        
+
         // Simulating network delay
         long networkDelay = 150;
         long serverTime = server.getTime() + networkDelay / 2; // Server time when processing
-        
+
         long t1 = t0 + networkDelay; // Client receives response at 1150
-        
+
         long rtt = t1 - t0;
         long syncedTime = calculateSynchronizedTime(serverTime, rtt);
 

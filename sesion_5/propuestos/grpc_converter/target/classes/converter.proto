@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "edu.unsa.sd.grpc";
+option java_outer_classname = "ConverterProto";
+
+service Converter {
+  rpc Convert (ConvertRequest) returns (ConvertResponse);
+}
+
+enum ConversionType {
+  CELSIUS_TO_FAHRENHEIT = 0;
+  SOLES_TO_DOLARES = 1;
+  KILOMETROS_TO_MILLAS = 2;
+}
+
+message ConvertRequest {
+  double value = 1;
+  ConversionType type = 2;
+}
+
+message ConvertResponse {
+  double result = 1;
+  string message = 2;
+}
