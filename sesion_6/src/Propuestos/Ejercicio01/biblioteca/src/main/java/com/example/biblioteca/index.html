@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API RESTful - Biblioteca</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h2 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.delete {
+            background-color: #f44336;
+        }
+        button.delete:hover {
+            background-color: #da190b;
+        }
+        button.update {
+            background-color: #2196F3;
+        }
+        button.update:hover {
+            background-color: #0b7dda;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        li:hover {
+            background-color: #efefef;
+        }
+        .info {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>API RESTful - Biblioteca</h1>
+    
+    <div class="section">
+        <h2>1. Listar Todos los Libros</h2>
+        <button onclick="listar()">Consultar Libros</button>
+        <ul id="lista"></ul>
+    </div>
+
+    <div class="section">
+        <h2>2. Buscar Libro por ID</h2>
+        <input type="number" id="buscarId" placeholder="Ingrese ID del libro" min="1">
+        <button onclick="buscar()">Buscar</button>
+        <ul id="resultadoBusqueda"></ul>
+    </div>
+
+    <div class="section">
+        <h2>3. Agregar Nuevo Libro</h2>
+        <input type="number" id="nuevoId" placeholder="ID">
+        <input type="text" id="nuevoNombre" placeholder="Nombre">
+        <input type="text" id="nuevoAutor" placeholder="Autor">
+        <input type="text" id="nuevoGenero" placeholder="Género">
+        <button onclick="agregar()">Agregar</button>
+    </div>
+
+    <div class="section">
+        <h2>4. Actualizar Libro</h2>
+        <input type="number" id="actualizarId" placeholder="ID del libro a actualizar" min="1">
+        <input type="text" id="actualizarNombre" placeholder="Nuevo nombre">
+        <input type="text" id="actualizarAutor" placeholder="Nuevo autor">
+        <input type="text" id="actualizarGenero" placeholder="Nuevo género">
+        <button class="update" onclick="actualizar()">Actualizar</button>
+    </div>
+
+    <div class="section">
+        <h2>5. Eliminar Libro</h2>
+        <input type="number" id="eliminarId" placeholder="ID del libro a eliminar" min="1">
+        <button class="delete" onclick="eliminar()">Eliminar</button>
+    </div>
+</div>
+
+<script>
+const API_URL = "http://127.0.0.1:8080/libros";
+
+async function listar() {
+    try {
+        let r = await fetch(API_URL);
+        let datos = await r.json();
+        let lista = document.getElementById("lista");
+        lista.innerHTML = "";
+
+        if (datos.length === 0) {
+            lista.innerHTML = "<li>No hay libros</li>";
+            return;
+        }
+
+        datos.forEach(libro => {
+            lista.innerHTML += `<li>
+                <strong>ID: ${libro.id}</strong> | 
+                <strong>${libro.nombre}</strong> | 
+                <span class="info">Autor: ${libro.autor} | Género: ${libro.genero}</span>
+            </li>`;
+        });
+    } catch (error) {
+        alert("Error al listar: " + error);
+    }
+}
+
+async function buscar() {
+    try {
+        let id = document.getElementById("buscarId").value;
+        if (!id) {
+            alert("Ingrese un ID");
+            return;
+        }
+        let r = await fetch(API_URL + "/" + id);
+        let libro = await r.json();
+        let resultado = document.getElementById("resultadoBusqueda");
+        resultado.innerHTML = "";
+
+        if (libro === null) {
+            resultado.innerHTML = "<li>Libro no encontrado</li>";
+            return;
+        }
+
+        resultado.innerHTML = `<li>
+            <strong>ID: ${libro.id}</strong> | 
+            <strong>${libro.nombre}</strong> | 
+            <span class="info">Autor: ${libro.autor} | Género: ${libro.genero}</span>
+        </li>`;
+    } catch (error) {
+        alert("Error al buscar: " + error);
+    }
+}
+
+async function agregar() {
+    try {
+        let id = document.getElementById("nuevoId").value;
+        let nombre = document.getElementById("nuevoNombre").value;
+        let autor = document.getElementById("nuevoAutor").value;
+        let genero = document.getElementById("nuevoGenero").value;
+
+        if (!id || !nombre || !autor || !genero) {
+            alert("Complete todos los campos");
+            return;
+        }
+
+        let libro = {
+            id: parseInt(id),
+            nombre: nombre,
+            autor: autor,
+            genero: genero
+        };
+
+        let r = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(libro)
+        });
+
+        alert("Libro agregado exitosamente");
+        document.getElementById("nuevoId").value = "";
+        document.getElementById("nuevoNombre").value = "";
+        document.getElementById("nuevoAutor").value = "";
+        document.getElementById("nuevoGenero").value = "";
+        listar();
+    } catch (error) {
+        alert("Error al agregar: " + error);
+    }
+}
+
+async function actualizar() {
+    try {
+        let id = document.getElementById("actualizarId").value;
+        let nombre = document.getElementById("actualizarNombre").value;
+        let autor = document.getElementById("actualizarAutor").value;
+        let genero = document.getElementById("actualizarGenero").value;
+
+        if (!id || !nombre || !autor || !genero) {
+            alert("Complete todos los campos");
+            return;
+        }
+
+        let libro = {
+            id: parseInt(id),
+            nombre: nombre,
+            autor: autor,
+            genero: genero
+        };
+
+        let r = await fetch(API_URL + "/" + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(libro)
+        });
+
+        alert("Libro actualizado exitosamente");
+        document.getElementById("actualizarId").value = "";
+        document.getElementById("actualizarNombre").value = "";
+        document.getElementById("actualizarAutor").value = "";
+        document.getElementById("actualizarGenero").value = "";
+        listar();
+    } catch (error) {
+        alert("Error al actualizar: " + error);
+    }
+}
+
+async function eliminar() {
+    try {
+        let id = document.getElementById("eliminarId").value;
+        if (!id) {
+            alert("Ingrese un ID");
+            return;
+        }
+
+        if (!confirm("¿Está seguro de que desea eliminar el libro?")) {
+            return;
+        }
+
+        let r = await fetch(API_URL + "/" + id, {
+            method: 'DELETE'
+        });
+
+        alert("Libro eliminado exitosamente");
+        document.getElementById("eliminarId").value = "";
+        listar();
+    } catch (error) {
+        alert("Error al eliminar: " + error);
+    }
+}
+
+// Cargar lista al abrir
+window.onload = listar;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API RESTful - Estudiantes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h2 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.delete {
+            background-color: #f44336;
+        }
+        button.delete:hover {
+            background-color: #da190b;
+        }
+        button.update {
+            background-color: #2196F3;
+        }
+        button.update:hover {
+            background-color: #0b7dda;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        li:hover {
+            background-color: #efefef;
+        }
+        .info {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>API RESTful - Estudiantes</h1>
+    
+    <div class="section">
+        <h2>1. Listar Todos los Estudiantes</h2>
+        <button onclick="listar()">Consultar Estudiantes</button>
+        <ul id="lista"></ul>
+    </div>
+
+    <div class="section">
+        <h2>2. Buscar Estudiante por Índice</h2>
+        <input type="number" id="buscarIndice" placeholder="Ingrese índice del estudiante" min="0">
+        <button onclick="buscar()">Buscar</button>
+        <ul id="resultadoBusqueda"></ul>
+    </div>
+
+    <div class="section">
+        <h2>3. Agregar Nuevo Estudiante</h2>
+        <input type="number" id="nuevoId" placeholder="ID">
+        <input type="text" id="nuevoNombre" placeholder="Nombre">
+        <input type="text" id="nuevoApellido" placeholder="Apellido">
+        <input type="number" id="nuevoNota" placeholder="Nota (0-100)" min="0" max="100">
+        <button onclick="agregar()">Agregar</button>
+    </div>
+
+    <div class="section">
+        <h2>4. Actualizar Estudiante</h2>
+        <input type="number" id="actualizarIndice" placeholder="Índice del estudiante a actualizar" min="0">
+        <input type="number" id="actualizarId" placeholder="Nuevo ID">
+        <input type="text" id="actualizarNombre" placeholder="Nuevo nombre">
+        <input type="text" id="actualizarApellido" placeholder="Nuevo apellido">
+        <input type="number" id="actualizarNota" placeholder="Nueva nota (0-100)" min="0" max="100">
+        <button class="update" onclick="actualizar()">Actualizar</button>
+    </div>
+
+    <div class="section">
+        <h2>5. Eliminar Estudiante</h2>
+        <input type="number" id="eliminarIndice" placeholder="Índice del estudiante a eliminar" min="0">
+        <button class="delete" onclick="eliminar()">Eliminar</button>
+    </div>
+</div>
+
+<script>
+const API_URL = "http://127.0.0.1:5000/estudiantes";
+
+async function listar() {
+    try {
+        let r = await fetch(API_URL);
+        let datos = await r.json();
+        let lista = document.getElementById("lista");
+        lista.innerHTML = "";
+
+        if (datos.length === 0) {
+            lista.innerHTML = "<li>No hay estudiantes</li>";
+            return;
+        }
+
+        datos.forEach((estudiante, indice) => {
+            lista.innerHTML += `<li>
+                <strong>[${indice}] ID: ${estudiante.id}</strong> | 
+                <strong>${estudiante.nombre} ${estudiante.apellido}</strong> | 
+                <span class="info">Nota: ${estudiante.nota}</span>
+            </li>`;
+        });
+    } catch (error) {
+        alert("Error al listar: " + error);
+    }
+}
+
+async function buscar() {
+    try {
+        let indice = document.getElementById("buscarIndice").value;
+        if (indice === "") {
+            alert("Ingrese un índice");
+            return;
+        }
+        let r = await fetch(API_URL);
+        let datos = await r.json();
+        let resultado = document.getElementById("resultadoBusqueda");
+        resultado.innerHTML = "";
+
+        if (indice < 0 || indice >= datos.length) {
+            resultado.innerHTML = "<li>Estudiante no encontrado</li>";
+            return;
+        }
+
+        let estudiante = datos[indice];
+        resultado.innerHTML = `<li>
+            <strong>[${indice}] ID: ${estudiante.id}</strong> | 
+            <strong>${estudiante.nombre} ${estudiante.apellido}</strong> | 
+            <span class="info">Nota: ${estudiante.nota}</span>
+        </li>`;
+    } catch (error) {
+        alert("Error al buscar: " + error);
+    }
+}
+
+async function agregar() {
+    try {
+        let id = document.getElementById("nuevoId").value;
+        let nombre = document.getElementById("nuevoNombre").value;
+        let apellido = document.getElementById("nuevoApellido").value;
+        let nota = document.getElementById("nuevoNota").value;
+
+        if (!id || !nombre || !apellido || nota === "") {
+            alert("Complete todos los campos");
+            return;
+        }
+
+        let estudiante = {
+            id: parseInt(id),
+            nombre: nombre,
+            apellido: apellido,
+            nota: parseInt(nota)
+        };
+
+        let r = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(estudiante)
+        });
+
+        alert("Estudiante agregado exitosamente");
+        document.getElementById("nuevoId").value = "";
+        document.getElementById("nuevoNombre").value = "";
+        document.getElementById("nuevoApellido").value = "";
+        document.getElementById("nuevoNota").value = "";
+        listar();
+    } catch (error) {
+        alert("Error al agregar: " + error);
+    }
+}
+
+async function actualizar() {
+    try {
+        let indice = document.getElementById("actualizarIndice").value;
+        let id = document.getElementById("actualizarId").value;
+        let nombre = document.getElementById("actualizarNombre").value;
+        let apellido = document.getElementById("actualizarApellido").value;
+        let nota = document.getElementById("actualizarNota").value;
+
+        if (indice === "" || !id || !nombre || !apellido || nota === "") {
+            alert("Complete todos los campos");
+            return;
+        }
+
+        let estudiante = {
+            id: parseInt(id),
+            nombre: nombre,
+            apellido: apellido,
+            nota: parseInt(nota)
+        };
+
+        let r = await fetch(API_URL + "/" + indice, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(estudiante)
+        });
+
+        alert("Estudiante actualizado exitosamente");
+        document.getElementById("actualizarIndice").value = "";
+        document.getElementById("actualizarId").value = "";
+        document.getElementById("actualizarNombre").value = "";
+        document.getElementById("actualizarApellido").value = "";
+        document.getElementById("actualizarNota").value = "";
+        listar();
+    } catch (error) {
+        alert("Error al actualizar: " + error);
+    }
+}
+
+async function eliminar() {
+    try {
+        let indice = document.getElementById("eliminarIndice").value;
+        if (indice === "") {
+            alert("Ingrese un índice");
+            return;
+        }
+
+        if (!confirm("¿Está seguro de que desea eliminar el estudiante?")) {
+            return;
+        }
+
+        let r = await fetch(API_URL + "/" + indice, {
+            method: 'DELETE'
+        });
+
+        alert("Estudiante eliminado exitosamente");
+        document.getElementById("eliminarIndice").value = "";
+        listar();
+    } catch (error) {
+        alert("Error al eliminar: " + error);
+    }
+}
+
+// Cargar lista al abrir
+window.onload = listar;
+</script>
+
+</body>
+</html>
