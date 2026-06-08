@@ -1,0 +1,8 @@
+com/soap/Publicador.class
+com/soap/VentaProductosSOAP.class
+com/soap/ConversorSOAP.class
+com/soap/VentaProductosSOAPInterface.class
+com/soap/ConversorSOAPInterface.class
+com/soap/Consumidor.class
+com/soap/Publicador$CorsFilter.class
+com/soap/Producto.class

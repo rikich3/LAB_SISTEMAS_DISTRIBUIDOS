@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOAP Client Dashboard</title>
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary: #10b981;
+            --secondary-hover: #059669;
+            --accent: #f59e0b;
+            --error: #ef4444;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #a5b4fc, #818cf8, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .card-full {
+            grid-column: 1 / -1;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            width: 100%;
+            transition: filter 0.2s, transform 0.1s;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), #059669);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .result-box {
+            background: rgba(10, 15, 26, 0.6);
+            border: 1px dashed var(--card-border);
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            min-height: 50px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: #34d399;
+            transition: all 0.3s;
+        }
+
+        .result-box.error {
+            color: var(--error);
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .result-box.loading {
+            color: var(--accent);
+            border-color: rgba(245, 158, 11, 0.4);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        /* Catalogo de Productos */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .product-item {
+            background: rgba(31, 41, 55, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .product-item:hover {
+            background: rgba(31, 41, 55, 0.5);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .product-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-price {
+            color: var(--secondary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-stock {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--secondary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .badge.out-of-stock {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SOAP Web Services Dashboard</h1>
+        <p>Consumo interactivo de servicios SOAP locales (Java JAX-WS)</p>
+    </header>
+
+    <div class="container">
+        <!-- Tarjeta 1: Ejercicio Propuesto - Consultar desde Navegador -->
+        <div class="card card-full">
+            <h2>
+                <span>🔍</span> Actividad Propuesta: Consultar Endpoint Local
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.95rem;">
+                Este boton ejecuta el código exacto de la guía: <code>fetch("http://localhost:8081/calculadora")</code>. 
+                Dado que configuramos CORS en el publicador de Java, la llamada resolverá correctamente devolviendo la metadata del servicio SOAP en la consola del navegador.
+            </p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button id="btn-consultar-basico" class="btn btn-outline" style="flex: 1;" onclick="consumirBasico()">
+                    Ejecutar fetch() a calculadora (Log Console)
+                </button>
+                <button id="btn-consultar-ventas-basico" class="btn btn-outline" style="flex: 1;" onclick="consumirVentasBasico()">
+                    Ejecutar fetch() a ventas (Log Console)
+                </button>
+            </div>
+            <div id="res-basico" class="result-box">Presione uno de los botones anteriores para realizar el fetch...</div>
+        </div>
+
+        <!-- Tarjeta 2: Conversor de Temperatura SOAP -->
+        <div class="card">
+            <h2>
+                <span>🌡️</span> Conversor de Temperatura
+            </h2>
+            <div class="form-group">
+                <label for="temp-input">Valor de Temperatura</label>
+                <input type="number" id="temp-input" value="30" step="any">
+            </div>
+            <div class="form-group">
+                <label for="conversion-type">Tipo de Conversión</label>
+                <select id="conversion-type">
+                    <option value="cToF">Celsius ➔ Fahrenheit</option>
+                    <option value="fToC">Fahrenheit ➔ Celsius</option>
+                </select>
+            </div>
+            <button id="btn-convertir" class="btn" onclick="convertirTemperatura()">
+                Convertir vía SOAP
+            </button>
+            <div id="res-conversor" class="result-box">El resultado de la conversión se mostrará aquí...</div>
+        </div>
+
+        <!-- Tarjeta 3: Venta de Productos SOAP -->
+        <div class="card">
+            <h2>
+                <span>🛒</span> Venta de Productos en Línea
+            </h2>
+            <div style="margin-bottom: 1rem; display: flex; gap: 0.5rem;">
+                <button id="btn-cargar-productos" class="btn btn-secondary" onclick="cargarProductos()">
+                    Actualizar Catálogo de Productos
+                </button>
+            </div>
+            <div class="form-group">
+                <label for="product-select">Seleccionar Producto</label>
+                <select id="product-select">
+                    <option value="">Cargue los productos primero...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quantity-input">Cantidad a comprar</label>
+                <input type="number" id="quantity-input" value="1" min="1">
+            </div>
+            <button id="btn-comprar" class="btn" onclick="comprarProducto()">
+                Realizar Compra SOAP
+            </button>
+            <div id="res-ventas" class="result-box">Cargue productos o realice una compra...</div>
+        </div>
+
+        <!-- Tarjeta Full: Catálogo Visual de Productos -->
+        <div class="card card-full">
+            <h2>
+                <span>📦</span> Catálogo de Inventario SOAP
+            </h2>
+            <div id="product-catalog" class="product-grid">
+                <p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center; padding: 2rem;">
+                    Haga clic en "Actualizar Catálogo de Productos" para ver el inventario disponible.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. EJERCICIO PROPUESTO: FETCH SIMPLE (GET) ---
+        function consumirBasico() {
+            const resBox = document.getElementById("res-basico");
+            resBox.className = "result-box loading";
+            resBox.textContent = "Realizando fetch(\"http://localhost:8081/calculadora\")...";
+
+            fetch("http://localhost:8081/calculadora")
+                .then(r => {
+                    console.log("Respuesta de calculadora:", r);
+                    resBox.className = "result-box";
+                    resBox.textContent = `Fetch completado con éxito.\nStatus: ${r.status} ${r.statusText}\nHeaders: Content-Type = ${r.headers.get("content-type")}\n(Revisar la consola del navegador para ver el objeto Response detallado)`;
+                })
+                .catch(err => {
+                    console.error("Error en fetch:", err);
+                    resBox.className = "result-box error";
+                    resBox.textContent = `Error en fetch:\n${err.message}\n\nAsegúrese de que el servidor Java SOAP esté corriendo en http://localhost:8081/calculadora`;
+                });
+        }
+
+        function consumirVentasBasico() {
+            const resBox = document.getElementById("res-basico");
+            resBox.className = "result-box loading";
+            resBox.textContent = "Realizando fetch(\"http://localhost:8081/ventas\")...";
+
+            fetch("http://localhost:8081/ventas")
+                .then(r => {
+                    console.log("Respuesta de ventas:", r);
+                    resBox.className = "result-box";
+                    resBox.textContent = `Fetch completado con éxito.\nStatus: ${r.status} ${r.statusText}\nHeaders: Content-Type = ${r.headers.get("content-type")}\n(Revisar la consola del navegador para ver el objeto Response detallado)`;
+                })
+                .catch(err => {
+                    console.error("Error en fetch:", err);
+                    resBox.className = "result-box error";
+                    resBox.textContent = `Error en fetch:\n${err.message}\n\nAsegúrese de que el servidor Java SOAP esté corriendo en http://localhost:8081/ventas`;
+                });
+        }
+
+        // --- 2. CONVERSOR DE TEMPERATURA: SOAP POST REQUEST ---
+        function convertirTemperatura() {
+            const tempVal = document.getElementById("temp-input").value;
+            const conversion = document.getElementById("conversion-type").value;
+            const resBox = document.getElementById("res-conversor");
+
+            if (tempVal === "") {
+                resBox.className = "result-box error";
+                resBox.textContent = "Por favor ingrese un valor de temperatura.";
+                return;
+            }
+
+            resBox.className = "result-box loading";
+            resBox.textContent = "Enviando mensaje SOAP...";
+
+            // Construir el Envelope XML de SOAP
+            const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:${conversion}>
+         <arg0>${tempVal}</arg0>
+      </soap:${conversion}>
+   </soapenv:Body>
+</soapenv:Envelope>`;
+
+            fetch("http://localhost:8081/calculadora", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/xml; charset=utf-8",
+                    "SOAPAction": ""
+                },
+                body: soapEnvelope
+            })
+            .then(response => response.text())
+            .then(xmlText => {
+                // Parsear respuesta XML
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+                const returnNode = xmlDoc.getElementsByTagName("return")[0];
+                
+                if (returnNode) {
+                    const result = parseFloat(returnNode.textContent).toFixed(2);
+                    resBox.className = "result-box";
+                    const unit = conversion === "cToF" ? "°F" : "°C";
+                    const origUnit = conversion === "cToF" ? "°C" : "°F";
+                    resBox.textContent = `Resultado SOAP: ${tempVal}${origUnit} ➔ ${result}${unit}`;
+                } else {
+                    throw new Error("No se encontró el nodo de retorno en el XML.");
+                }
+            })
+            .catch(err => {
+                resBox.className = "result-box error";
+                resBox.textContent = `Error en la llamada SOAP:\n${err.message}`;
+            });
+        }
+
+        // --- 3. VENTA DE PRODUCTOS: SOAP POST REQUESTS ---
+        function cargarProductos() {
+            const resBox = document.getElementById("res-ventas");
+            const select = document.getElementById("product-select");
+            const catalog = document.getElementById("product-catalog");
+
+            resBox.className = "result-box loading";
+            resBox.textContent = "Obteniendo productos vía SOAP...";
+
+            const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:obtenerProductos/>
+   </soapenv:Body>
+</soapenv:Envelope>`;
+
+            fetch("http://localhost:8081/ventas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/xml; charset=utf-8",
+                    "SOAPAction": ""
+                },
+                body: soapEnvelope
+            })
+            .then(response => response.text())
+            .then(xmlText => {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+                const returnNodes = xmlDoc.getElementsByTagName("return");
+
+                select.innerHTML = "";
+                catalog.innerHTML = "";
+
+                if (returnNodes.length === 0) {
+                    catalog.innerHTML = `<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center; padding: 2rem;">No hay productos disponibles.</p>`;
+                    resBox.className = "result-box";
+                    resBox.textContent = "Productos cargados: Inventario vacío.";
+                    return;
+                }
+
+                for (let i = 0; i < returnNodes.length; i++) {
+                    const node = returnNodes[i];
+                    const id = node.getElementsByTagName("id")[0].textContent;
+                    const nombre = node.getElementsByTagName("nombre")[0].textContent;
+                    const precio = parseFloat(node.getElementsByTagName("precio")[0].textContent).toFixed(2);
+                    const stock = parseInt(node.getElementsByTagName("stock")[0].textContent);
+
+                    // Añadir al select
+                    const opt = document.createElement("option");
+                    opt.value = id;
+                    opt.textContent = `${nombre} ($${precio} - Stock: ${stock})`;
+                    select.appendChild(opt);
+
+                    // Añadir al catálogo visual
+                    const isOutOfStock = stock <= 0;
+                    const badgeClass = isOutOfStock ? "badge out-of-stock" : "badge";
+                    const badgeText = isOutOfStock ? "Agotado" : `En Stock: ${stock}`;
+
+                    const item = document.createElement("div");
+                    item.className = "product-item";
+                    item.innerHTML = `
+                        <div class="product-title">${nombre}</div>
+                        <div class="product-price">$${precio}</div>
+                        <div class="product-stock">
+                            <span class="${badgeClass}">${badgeText}</span>
+                        </div>
+                    `;
+                    catalog.appendChild(item);
+                }
+
+                resBox.className = "result-box";
+                resBox.textContent = `Se cargaron con éxito ${returnNodes.length} productos desde el servicio SOAP.`;
+            })
+            .catch(err => {
+                resBox.className = "result-box error";
+                resBox.textContent = `Error al cargar productos:\n${err.message}`;
+            });
+        }
+
+        function comprarProducto() {
+            const select = document.getElementById("product-select");
+            const prodId = select.value;
+            const quantity = document.getElementById("quantity-input").value;
+            const resBox = document.getElementById("res-ventas");
+
+            if (!prodId) {
+                resBox.className = "result-box error";
+                resBox.textContent = "Por favor, seleccione un producto del catálogo.";
+                return;
+            }
+
+            if (quantity <= 0) {
+                resBox.className = "result-box error";
+                resBox.textContent = "La cantidad debe ser mayor a 0.";
+                return;
+            }
+
+            resBox.className = "result-box loading";
+            resBox.textContent = "Enviando transacción de venta SOAP...";
+
+            const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:realizarVenta>
+         <idProducto>${prodId}</idProducto>
+         <cantidad>${quantity}</cantidad>
+      </soap:realizarVenta>
+   </soapenv:Body>
+</soapenv:Envelope>`;
+
+            fetch("http://localhost:8081/ventas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/xml; charset=utf-8",
+                    "SOAPAction": ""
+                },
+                body: soapEnvelope
+            })
+            .then(response => response.text())
+            .then(xmlText => {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+                const returnNode = xmlDoc.getElementsByTagName("return")[0];
+
+                if (returnNode) {
+                    const resultText = returnNode.textContent;
+                    if (resultText.startsWith("Error")) {
+                        resBox.className = "result-box error";
+                    } else {
+                        resBox.className = "result-box";
+                        // Refrescar automáticamente el catálogo
+                        cargarProductos();
+                    }
+                    resBox.textContent = `Respuesta de Compra SOAP:\n${resultText}`;
+                } else {
+                    throw new Error("No se recibió respuesta válida de la transacción.");
+                }
+            })
+            .catch(err => {
+                resBox.className = "result-box error";
+                resBox.textContent = `Error en transacción SOAP:\n${err.message}`;
+            });
+        }
+    </script>
+</body>
+</html>
