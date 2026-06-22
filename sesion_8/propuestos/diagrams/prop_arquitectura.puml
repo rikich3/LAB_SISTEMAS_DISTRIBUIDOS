@@ -1,0 +1,43 @@
+@startuml
+skinparam backgroundColor #FEFEFE
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+package "Banco Cooperativo" {
+    
+    package "Nodo Coordinador" {
+        component "Arequipa" as AQP <<Coordinador>> {
+            card "PostgreSQL\nalmacen_arequipa\nPuerto: 5432" as AQP_DB #LightYellow
+        }
+    }
+    
+    package "Nodos Participantes" {
+        component "Cusco" as CUS <<Participante>> {
+            card "PostgreSQL\nbanco_cusco\nPuerto: 5434" as CUS_DB #LightCyan
+        }
+        
+        component "Trujillo" as TRU <<Participante>> {
+            card "PostgreSQL\nbanco_trujillo\nPuerto: 5435" as TRU_DB #LightCyan
+        }
+    }
+    
+    AQP -[bold]-> CUS : Protocolo 2PC\nPREPARE / COMMIT / ROLLBACK
+    AQP -[bold]-> TRU : Protocolo 2PC\nPREPARE / COMMIT / ROLLBACK
+
+}
+
+package "Infraestructura" {
+    cloud "Docker Network\nbdd_network (bridge)" as NET #LightGray
+}
+
+AQP -- NET
+CUS -- NET
+TRU -- NET
+
+legend right
+    |= Color |= Rol |
+    | <#LightYellow> | Coordinador (Arequipa) |
+    | <#LightCyan> | Participantes (Cusco, Trujillo) |
+endlegend
+
+@enduml

@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+  postgres_arequipa:
+    image: postgres:16
+    container_name: almacen_arequipa
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: almacen_arequipa
+    ports:
+      - "5432:5432"
+    volumes:
+      - arequipa_data:/var/lib/postgresql/data
+      - ./scripts_sql/init_arequipa.sql:/docker-entrypoint-initdb.d/01_init_arequipa.sql
+      - ./scripts_sql/init_banco_arequipa.sh:/docker-entrypoint-initdb.d/02_init_banco_arequipa.sh
+    networks:
+      - bdd_network
+
+  postgres_lima:
+    image: postgres:16
+    container_name: almacen_lima
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: almacen_lima
+    ports:
+      - "5433:5432"
+    volumes:
+      - lima_data:/var/lib/postgresql/data
+      - ./scripts_sql/init_lima.sql:/docker-entrypoint-initdb.d/01_init_lima.sql
+    networks:
+      - bdd_network
+
+  postgres_cusco:
+    image: postgres:16
+    container_name: banco_cusco
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: banco_cusco
+    ports:
+      - "5434:5432"
+    volumes:
+      - cusco_data:/var/lib/postgresql/data
+      - ./scripts_sql/init_cusco.sql:/docker-entrypoint-initdb.d/01_init_cusco.sql
+    networks:
+      - bdd_network
+
+  postgres_trujillo:
+    image: postgres:16
+    container_name: banco_trujillo
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: banco_trujillo
+    ports:
+      - "5435:5432"
+    volumes:
+      - trujillo_data:/var/lib/postgresql/data
+      - ./scripts_sql/init_trujillo.sql:/docker-entrypoint-initdb.d/01_init_trujillo.sql
+    networks:
+      - bdd_network
+
+volumes:
+  arequipa_data:
+  lima_data:
+  cusco_data:
+  trujillo_data:
+
+networks:
+  bdd_network:
+    driver: bridge

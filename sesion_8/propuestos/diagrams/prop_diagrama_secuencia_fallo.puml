@@ -1,0 +1,72 @@
+@startuml
+skinparam backgroundColor #FEFEFE
+skinparam sequenceArrowThickness 2
+
+actor Cliente
+participant "Arequipa\n(Coordinador)" as AQP
+participant "Cusco\n(Participante)" as CUS
+participant "Trujillo\n(Participante)" as TRU
+
+== Fase 1: Votación (PREPARE) ==
+
+Cliente -> AQP : transferencia(monto, origen, destino)
+activate AQP
+
+AQP -> CUS : PREPARE
+activate CUS
+CUS --> AQP : YES (voto afirmativo)
+deactivate CUS
+
+AQP -> TRU : PREPARE
+activate TRU
+
+note right of TRU #FFDDDD
+  **NODO CAÍDO**
+  Trujillo no responde
+  (timeout / connection refused)
+end note
+
+TRU -[#red]->> AQP : SIN RESPUESTA
+
+note right of AQP #FFDDDD
+  Coordinador detecta timeout:
+  Fase 1 incompleta
+end note
+
+== Decisión: ROLLBACK ==
+
+AQP -> AQP : Decision: ROLLBACK
+
+AQP -> CUS : ROLLBACK
+activate CUS
+CUS --> AQP : ACK
+note left of CUS
+  Cusco deshace cambios
+  (transacción abortada)
+end note
+deactivate CUS
+
+AQP -> TRU : ROLLBACK
+activate TRU #FF6666
+TRU -[#red]->> AQP : SIN RESPUESTA
+
+note right of TRU #FFDDDD
+  Trujillo caído: no recibe
+  ROLLBACK. Al recuperarse
+  consultará al coordinador
+  (heurística / recovery)
+end note
+deactivate TRU
+
+AQP -> AQP : Deshacer localmente
+
+AQP --> Cliente : ERROR - Transferencia abortada
+
+note right of AQP #FFDDDD
+  Estado final: Consistente
+  - Arequipa: sin cambios
+  - Cusco: sin cambios
+  - Trujillo: dudoso (recuperación posterior)
+end note
+
+@enduml
